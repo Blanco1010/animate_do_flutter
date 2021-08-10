@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'src/pages/navigation_page.dart';
 import 'src/pages/page1.dart';
 import 'src/pages/twitter_page.dart';
 
@@ -11,7 +12,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Animate do',
-      home: Page1(),
+      home: NavigationPage(),
+      //home: Page1(),
       //home: TwitterPage(),
     );
   }
