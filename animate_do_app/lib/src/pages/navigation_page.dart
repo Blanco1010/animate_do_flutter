@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -58,17 +59,28 @@ class _ButtonNavigationState extends State<ButtonNavigation> {
                   top: 0.0,
                   right: 0.0,
                   //child: Icon(Icons.brightness_1, size: 8, color: Colors.red),
-                  child: Container(
-                    width: 12,
-                    height: 12,
-                    child: Text(
-                      '$number',
-                      style: TextStyle(fontSize: 7, color: Colors.white),
-                    ),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
+                  child: BounceInDown(
+                    from: 10,
+                    animate: (number > 0) ? true : false,
+                    child: Bounce(
+                      from: 10,
+                      controller: (controller) =>
+                          Provider.of<_NotificationModel>(context,
+                                  listen: false)
+                              .bounceController = controller,
+                      child: Container(
+                        width: 12,
+                        height: 12,
+                        child: Text(
+                          '$number',
+                          style: TextStyle(fontSize: 7, color: Colors.white),
+                        ),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -94,7 +106,13 @@ class ButtonFloating extends StatelessWidget {
         vaule++;
         Provider.of<_NotificationModel>(context, listen: false).number = vaule;
 
-        print(vaule);
+        if (vaule >= 1) {
+          print('object');
+          final controller =
+              Provider.of<_NotificationModel>(context, listen: false)
+                  ._bouncecontroller;
+          controller!.forward(from: 0);
+        }
       },
       backgroundColor: Colors.red,
       child: FaIcon(
@@ -106,6 +124,7 @@ class ButtonFloating extends StatelessWidget {
 
 class _NotificationModel extends ChangeNotifier {
   int _number = 0;
+  AnimationController? _bouncecontroller;
 
   int get number => _number;
 
@@ -113,6 +132,13 @@ class _NotificationModel extends ChangeNotifier {
     if (vaule < 100) {
       this._number = vaule;
     }
+
     notifyListeners();
+  }
+
+  AnimationController get bounceController => _bouncecontroller!;
+
+  set bounceController(AnimationController controller) {
+    this._bouncecontroller = controller;
   }
 }
